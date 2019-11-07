@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.Nullable;
+
 import android.util.Log;
+
+import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
