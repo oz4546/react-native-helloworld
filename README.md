@@ -67,26 +67,27 @@ You may also run either app by using the standard build and run tools in each pl
 The following are commonly found issues and what can be done to fix them
 
 __For iOS__
-#Double Conversion
+
+# Double Conversion
 This is a common issue seen when building the ios app in xcode and the following commands fix it.
 Starting from the base react-native app folder
-'''
+```
 cd node_modules/react-native/third-party/glog-0.3.x/
 ./configure
 make
 make install
-'''
+```
 clean and rebuild the project
 
-#No member named '__rip'
+# No member named '__rip'
 This usually follows the double conversion error and can be solved with the following commands.
 Starting from the base react-native app folder
-'''
+```
 cd node_modules/react-native/third-party/glog-0.3.x/src/
-'''
+```
 Now using your code editor of choice open the 'config.h' file.
-Replace the line '''#define PC_FROM_UCONTEXT uc_mcontext->__ss.__rip''' near line number 156 with
-'''
+Replace the line ```#define PC_FROM_UCONTEXT uc_mcontext->__ss.__rip``` near line number 156 with
+```
 #undef HAVE_UCONTEXT_H
 #undef PC_FROM_UCONTEXT
 #if defined(__x86_64__)
@@ -94,7 +95,7 @@ Replace the line '''#define PC_FROM_UCONTEXT uc_mcontext->__ss.__rip''' near lin
 #elif defined(__i386__)
 #define PC_FROM_UCONTEXT uc_mcontext->__ss.__eip
 #endif
-'''
+```
 clean and rebuild the project
 
 if you have any questions please feel free to reach out to support@navisens.com 
