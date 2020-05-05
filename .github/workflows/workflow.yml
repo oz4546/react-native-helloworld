@@ -41,9 +41,9 @@ jobs:
       - name: Create Artifact
         uses: actions/upload-artifact@v1
         with:
-          name: app-release.apk
+          name: native-app-${RANDOM}.apk
           path: android/app/build/outputs/apk/release/
       - name: Deploy to S3
       # All commands after this point have access to the AWS CLI
         run: |
-          aws s3 cp android/app/build/outputs/apk/release/ s3://tamuz-mobile-artifacts/test-${RANDOM} --recursive --exclude "*" --include "*.apk" --acl public-read-write
+          aws s3 cp android/app/build/outputs/apk/release/ s3://tamuz-mobile-artifacts/ --recursive --exclude "*" --include "*.apk" --acl public-read-write
