@@ -21,23 +21,25 @@ jobs:
     needs: install-and-test
     runs-on: ubuntu-latest
     steps: 
-#      - uses: actions/checkout@v2
-#      - name: Install npm dependencies
-#        run: |
-#          npm install
-#      - name: Build Android Release
-#        run: |
-#          cd android && ./gradlew assembleRelease
-#      - name: Create Artifact
-#        uses: actions/upload-artifact@v1
-#        with:
-#          name: app-release.apk
-#          path: android/app/build/outputs/apk/release/
-      - name: ls -l
+      - uses: actions/checkout@v2
+      - name: Install npm dependencies
+        run: |
+          npm install
+      - name: Build Android Release
+        run: |
+          cd android && ./gradlew assembleRelease
+      - name: Create Artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: app-release.apk
+          path: android/app/build/outputs/apk/release/
+      - name: ls
         run: |
           ls -l
+          cd android/app/build/outputs/apk/release/
           pwd
-          ls
+          ls -l
+          pwd
       - uses: jakejarvis/s3-sync-action@master
         with:
           args: --acl public-read --follow-symlinks --delete
@@ -46,4 +48,4 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: 'eu-west-1'   # optional: defaults to us-east-1
-          SOURCE_DIR: 'android'      # optional: defaults to entire repository
+          SOURCE_DIR: 'android/app/build/outputs/apk/release/'      # optional: defaults to entire repository
