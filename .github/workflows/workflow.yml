@@ -60,4 +60,4 @@ jobs:
       # All commands after this point have access to the AWS CLI
         run: |
           aws s3 ls
-          aws s3 cp /android/app/build/outputs/apk/release/ s3://tamuz-mobile-artifacts/ --recursive --exclude "*" --include "*.apk"
+          aws s3 cp android/app/build/outputs/apk/release/ s3://tamuz-mobile-artifacts/ --recursive --exclude "*" --include "*.apk"
