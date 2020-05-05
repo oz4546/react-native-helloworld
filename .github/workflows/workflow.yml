@@ -41,7 +41,7 @@ jobs:
       - name: Create Artifact
         uses: actions/upload-artifact@v1
         with:
-          name: native-app-${RANDOM}.apk
+          name: app-release.apk
           path: android/app/build/outputs/apk/release/
       - name: Deploy to S3
       # All commands after this point have access to the AWS CLI
