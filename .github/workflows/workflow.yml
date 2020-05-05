@@ -20,7 +20,13 @@ jobs:
   build-android:
     needs: install-and-test
     runs-on: ubuntu-latest
-    steps: 
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-1
       - uses: actions/checkout@v2
       - name: Install npm dependencies
         run: |
@@ -51,11 +57,7 @@ jobs:
 #          AWS_REGION: us-west-1
 #          SOURCE_DIR: 'android/app/build/outputs/apk/release/'
       - name: Deploy to S3
-      - uses: chrislennon/action-aws-cli@v1.1
       # All commands after this point have access to the AWS CLI
         run: |
           aws s3 ls
           aws s3 cp /android/app/build/outputs/apk/release/ s3://tamuz-mobile-artifacts/ --recursive --exclude "*" --include "*.apk"
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
