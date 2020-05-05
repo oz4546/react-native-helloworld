@@ -35,7 +35,6 @@ jobs:
 #          path: android/app/build/outputs/apk/release/
       - name: ls -l
         id: list files
-        env:
         run: |
           ls -l
       - uses: jakejarvis/s3-sync-action@master
