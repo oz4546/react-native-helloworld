@@ -18,9 +18,13 @@ jobs:
         run: |
           npm install
   build-android:
-    needs: install-and-test
+#    needs: install-and-test
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+      - name: Install npm
+        run: |
+          npm install
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -39,25 +43,7 @@ jobs:
         with:
           name: app-release.apk
           path: android/app/build/outputs/apk/release/
-      - name: ls
-        run: |
-          ls -l
-          cd android/app/build/outputs/apk/release/
-          pwd
-          ls -l
-          pwd
-#      - name: Deploy to S3
-#        uses: jakejarvis/s3-sync-action@master
-#        with:
-#          args: --acl public-read --delete
-#        env:
-#          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-#          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#          AWS_REGION: us-west-1
-#          SOURCE_DIR: 'android/app/build/outputs/apk/release/'
       - name: Deploy to S3
       # All commands after this point have access to the AWS CLI
         run: |
-          aws s3 ls
-          aws s3 cp android/app/build/outputs/apk/release/ s3://tamuz-mobile-artifacts/ --recursive --exclude "*" --include "*.apk"
+          aws s3 cp android/app/build/outputs/apk/release/ s3://tamuz-mobile-artifacts/test-${RANDOM} --recursive --exclude "*" --include "*.apk" --acl public-read-write
