@@ -1,14 +1,14 @@
 name: react-native-android-build-apk
-on:
-  push:
-    branches:
-      - master
 #on:
-#  # Trigger the workflow when repository_dispatch is invoked via lambda
-#  repository_dispatch:
-#   types: workflow-trigger
-#   branches:
-#     - master
+#  push:
+#    branches:
+#      - master
+on:
+  # Trigger the workflow when repository_dispatch is invoked via lambda
+  repository_dispatch:
+   types: workflow-trigger
+   branches:
+     - master
 jobs:
 #  install-and-test:
 #    runs-on: ubuntu-latest
@@ -31,11 +31,18 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-west-1
-      - uses: actions/checkout@v2
-#      - name: Replace bin/config.js with API host
-#        # All commands after this point have access to the AWS CLI
-#        run: |
-#          aws s3 cp android/app/build/outputs/apk/release/app-release-unsigned.apk s3://tamuz-mobile-artifacts/native-app-sp-${SHA:0:7}.apk
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.client_payload.branch_name }}
+      - name: Replace bin/config.js with API host
+        env:
+          API: ${{ github.event.client_payload.api }}
+        # All commands after this point have access to the AWS CLI
+        run: |
+          sed -i 's/appEnvironments\[appEnv]\;/${API};/' /bin/config.js
+          sed -i 's/chatEnvironments\[appEnv]\;/${API};/' /bin/config.js
+          cat /bin/config.js
       - name: Install npm dependencies
         run: |
           npm install
@@ -45,11 +52,21 @@ jobs:
       - name: Create Artifact
         uses: actions/upload-artifact@v1
         with:
-          name: native-app-sp-${{ env.SHORTSHA }}.apk
+          name: app-release-unsigned.apk
           path: android/app/build/outputs/apk/release/
       - name: Deploy to S3
         env:
-          SHA: ${{ github.sha }}
+          S3Bucket: ${{ github.event.client_payload.branch_name }}
         # All commands after this point have access to the AWS CLI
         run: |
-          aws s3 cp android/app/build/outputs/apk/release/app-release-unsigned.apk s3://tamuz-mobile-artifacts/native-app-sp-${SHA:0:7}.apk --acl public-read
+          aws s3 cp android/app/build/outputs/apk/release/app-release-unsigned.apk s3://${S3Bucket}/native-app-sp-${SHA:0:7}.apk --acl public-read
+      - name: Send success signal back to CF
+        if: success()
+        env:
+          SHA: ${{ github.sha }}
+        run: |
+          curl -X PUT -H 'Content-Type:' --data-binary "{\"Status\" : \"SUCCESS\",\"Reason\" : \"artifact upload completeted succesfully\", \"UniqueId\": \"ArtifactName\", \"Data\": \"native-app-sp-${SHA:0:7}\"}" "${{ github.event.client_payload.cf_response_url }}"
+      - name: Send failure signal back to CF
+        if: failure()
+        run: |
+          curl -X PUT -H 'Content-Type:' --data-binary "{\"Status\" : \"FAILURE\",\"Reason\" : \"failed to create artifact, check Github action logs \", \"UniqueId\": \"${SHA:0:7}\", \"Data\": \"${SHA:0:7}\"}" "${{ github.event.client_payload.cf_response_url }}"
