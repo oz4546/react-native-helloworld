@@ -28,8 +28,8 @@ jobs:
           API: ${{ github.event.client_payload.api_url }}
         # All commands after this point have access to the AWS CLI
         run: |
-          sed -i "/appEnvironments\[appEnv\]/c $API" bin/config.js
-          sed -i "/chatEnvironments\[appEnv\]/c $API" bin/config.js
+          sed -i "s|appEnvironments\[appEnv\]|$API|g" bin/config.js
+          sed -i "s|chatEnvironments\[appEnv\]|$API|g" bin/config.js
           cat bin/config.js
       - name: Install npm dependencies
         run: |
@@ -48,7 +48,7 @@ jobs:
           S3Bucket: ${{ github.event.client_payload.bucket_name }}
         # All commands after this point have access to the AWS CLI
         run: |
-          aws s3 cp android/app/build/outputs/apk/release/app-release-unsigned.apk s3://${S3Bucket}/native-app-sp-${SHA:0:7}.apk --acl public-read
+          aws s3 cp android/app/build/outputs/apk/release/app-release-unsigned.apk s3://${S3Bucket}/android/native-app-sp-${SHA:0:7}.apk --acl public-read
       - name: Send success signal back to CF
         if: success()
         env:
