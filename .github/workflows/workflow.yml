@@ -30,7 +30,7 @@ jobs:
         run: |
           sed -i 's/appEnvironments\[appEnv]\;/${API};/' bin/config.js
           sed -i 's/chatEnvironments\[appEnv]\;/${API};/' bin/config.js
-          cat /bin/config.js
+          cat bin/config.js
       - name: Install npm dependencies
         run: |
           npm install
