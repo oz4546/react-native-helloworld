@@ -43,8 +43,8 @@ jobs:
           cd ios && pod install
       - name: Build IOS Release
         run: |
-          xcodebuild -scheme myapp archive -archivepath myapp.xcarchive -allowprovisioningUpdates
-          xcodebuild -exportarchive -archivePath ./myapp.xcarchive -exportpath . -exportoptionsplist myapp/info.plist
+          xcodebuild -workspace myapp.xcworkspace -scheme myapp archive -archivePath myapp.xcarchive -allowProvisioningUpdates
+          xcodebuild -exportArchive -archivePath ./myapp.xcarchive -exportPath . -exportOptionsPlist myapp/Info.plist
           mv myapp.ipa ../myapp.ipa
       - name: Create Artifact
         uses: actions/upload-artifact@v1
