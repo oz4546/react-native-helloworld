@@ -34,9 +34,9 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-west-1
       - uses: actions/checkout@v2
-      - name: Install npm dependencies
-        run: |
-          npm install
+#      - name: Install npm dependencies
+#        run: |
+#          npm install
       - name: Build Android Release
         run: |
           cd android && ./gradlew assembleRelease
@@ -51,4 +51,3 @@ jobs:
         # All commands after this point have access to the AWS CLI
         run: |
           aws s3 cp android/app/build/outputs/apk/release/app-release-unsigned.apk s3://tamuz-mobile-artifacts/native-app-sp-${SHA:0:7}.apk
-#          aws s3 cp android/app/build/outputs/apk/release/ s3://tamuz-mobile-artifacts/native-app-sp-${SHA:0:7}.apk --recursive --exclude "*" --include "*.apk"
