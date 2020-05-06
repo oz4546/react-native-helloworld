@@ -43,6 +43,8 @@ jobs:
           cd ios && pod install
       - name: Build IOS Release
         run: |
+          pwd
+          cd ios
           xcodebuild -workspace reactNativeHelloAgainWorld.xcworkspace -scheme reactNativeHelloAgainWorld archive -archivePath reactNativeHelloAgainWorld.xcarchive -allowProvisioningUpdates
           xcodebuild -exportArchive -archivePath ./myapp.xcarchive -exportPath . -exportOptionsPlist myapp/Info.plist
           mv myapp.ipa ../myapp.ipa
