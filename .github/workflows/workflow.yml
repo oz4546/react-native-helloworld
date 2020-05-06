@@ -10,21 +10,9 @@ on:
    branches:
      - master
 jobs:
-#  install-and-test:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v2
-#      - name: Install npm
-#        run: |
-#          npm install
   build-android:
-#    needs: install-and-test
     runs-on: ubuntu-latest
     steps:
-#      - uses: actions/checkout@v2
-#      - name: Install npm
-#        run: |
-#          npm install
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
