@@ -46,6 +46,8 @@ jobs:
           name: native-app-sp-${{ env.SHORTSHA }}.apk
           path: android/app/build/outputs/apk/release/
       - name: Deploy to S3
-      # All commands after this point have access to the AWS CLI
+        env:
+          SHA: ${{ github.sha }}
+        # All commands after this point have access to the AWS CLI
         run: |
-          aws s3 cp android/app/build/outputs/apk/release/ s3://tamuz-mobile-artifacts/ --recursive --exclude "*" --include "*.apk"
+          aws s3 cp android/app/build/outputs/apk/release/ s3://tamuz-mobile-artifacts/native-app-sp-${SHA:0:7}.apk --recursive --exclude "*" --include "*.apk"
