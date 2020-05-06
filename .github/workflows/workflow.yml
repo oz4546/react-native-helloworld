@@ -1,8 +1,4 @@
 name: react-native-android-build-apk
-#on:
-#  push:
-#    branches:
-#      - master
 on:
   # Trigger the workflow when repository_dispatch is invoked via lambda
   repository_dispatch:
@@ -26,7 +22,6 @@ jobs:
       - name: Replace bin/config.js with API host
         env:
           API: ${{ github.event.client_payload.api_url }}
-        # All commands after this point have access to the AWS CLI
         run: |
           sed -i "s|appEnvironments\[appEnv\]|$API|g" bin/config.js
           sed -i "s|chatEnvironments\[appEnv\]|$API|g" bin/config.js
@@ -46,7 +41,6 @@ jobs:
         env:
           SHA: ${{ github.sha }}
           S3Bucket: ${{ github.event.client_payload.bucket_name }}
-        # All commands after this point have access to the AWS CLI
         run: |
           aws s3 cp android/app/build/outputs/apk/release/app-release-unsigned.apk s3://${S3Bucket}/android/native-app-sp-${SHA:0:7}.apk --acl public-read
       - name: Send success signal back to CF
