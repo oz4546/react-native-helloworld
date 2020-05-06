@@ -23,10 +23,10 @@ jobs:
 #    needs: install-and-test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Install npm
-        run: |
-          npm install
+#      - uses: actions/checkout@v2
+#      - name: Install npm
+#        run: |
+#          npm install
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -34,9 +34,9 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-west-1
       - uses: actions/checkout@v2
-#      - name: Install npm dependencies
-#        run: |
-#          npm install
+      - name: Install npm dependencies
+        run: |
+          npm install
       - name: Build Android Release
         run: |
           cd android && ./gradlew assembleRelease
