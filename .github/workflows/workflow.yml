@@ -57,4 +57,4 @@ jobs:
       - name: Send failure signal back to CF
         if: failure()
         run: |
-          curl -X PUT -H 'Content-Type:' --data-binary "{\"Status\" : \"FAILURE\",\"Reason\" : \"failed to create artifact, check Github action logs \", \"UniqueId\": \"${SHA:0:7}\", \"Data\": \"${SHA:0:7}\"}" "${{ github.event.client_payload.cf_response_url }}"
+          curl -X PUT -H 'Content-Type:' --data-binary "{\"Status\" : \"FAILURE\",\"Reason\" : \"failed to create artifact, check Github action logs \", \"UniqueId\": \"ArtifactName\", \"Data\": \"${SHA:0:7}\"}" "${{ github.event.client_payload.cf_response_url }}"
