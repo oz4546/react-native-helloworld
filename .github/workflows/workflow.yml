@@ -37,7 +37,7 @@ jobs:
           ref: ${{ github.event.client_payload.branch_name }}
       - name: Replace bin/config.js with API host
         env:
-          API: ${{ github.event.client_payload.api }}
+          API: ${{ github.event.client_payload.api_url }}
         # All commands after this point have access to the AWS CLI
         run: |
           sed -i 's/appEnvironments\[appEnv]\;/${API};/' /bin/config.js
@@ -56,7 +56,7 @@ jobs:
           path: android/app/build/outputs/apk/release/
       - name: Deploy to S3
         env:
-          S3Bucket: ${{ github.event.client_payload.branch_name }}
+          S3Bucket: ${{ github.event.client_payload.bucket_name }}
         # All commands after this point have access to the AWS CLI
         run: |
           aws s3 cp android/app/build/outputs/apk/release/app-release-unsigned.apk s3://${S3Bucket}/native-app-sp-${SHA:0:7}.apk --acl public-read
