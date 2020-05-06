@@ -28,8 +28,8 @@ jobs:
           API: ${{ github.event.client_payload.api_url }}
         # All commands after this point have access to the AWS CLI
         run: |
-          sed -i 's/appEnvironments\[appEnv]\;/${API};/' bin/config.js
-          sed -i 's/chatEnvironments\[appEnv]\;/${API};/' bin/config.js
+          sed -i "s/appEnvironments\[appEnv]\;/${API};/" bin/config.js
+          sed -i "s/chatEnvironments\[appEnv]\;/${API};/" bin/config.js
           cat bin/config.js
       - name: Install npm dependencies
         run: |
@@ -44,6 +44,7 @@ jobs:
           path: android/app/build/outputs/apk/release/
       - name: Deploy to S3
         env:
+          SHA: ${{ github.sha }}
           S3Bucket: ${{ github.event.client_payload.bucket_name }}
         # All commands after this point have access to the AWS CLI
         run: |
@@ -57,4 +58,4 @@ jobs:
       - name: Send failure signal back to CF
         if: failure()
         run: |
-          curl -X PUT -H 'Content-Type:' --data-binary "{\"Status\" : \"FAILURE\",\"Reason\" : \"failed to create artifact, check Github action logs \", \"UniqueId\": \"ArtifactName\", \"Data\": \"${SHA:0:7}\"}" "${{ github.event.client_payload.cf_response_url }}"
+          curl -X PUT -H 'Content-Type:' --data-binary "{\"Status\" : \"FAILURE\",\"Reason\" : \"failed to create artifact, check Github action logs \", \"UniqueId\": \"ArtifactName\", \"Data\": \"\"}" "${{ github.event.client_payload.cf_response_url }}"
