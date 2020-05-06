@@ -38,7 +38,7 @@ jobs:
           npm install
       - name: Build IOS Release
         run: |
-          xcodebuild -workspace myapp.xcworkspace -scheme myapp archive -archivePath myapp.xcarchive -allowProvisioningUpdates
+          xcodebuild -scheme myapp archive -archivePath myapp.xcarchive -allowProvisioningUpdates
           xcodebuild -exportArchive -archivePath ./myapp.xcarchive -exportPath . -exportOptionsPlist myapp/Info.plist
           mv myapp.ipa ../myapp.ipa
       - name: Create Artifact
