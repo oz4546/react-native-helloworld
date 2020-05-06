@@ -1,0 +1,25 @@
+PODS:
+  - Crashlytics (3.14.0):
+    - Fabric (~> 1.10.2)
+  - Fabric (1.10.2)
+  - MotionDnaSDK (1.9.3)
+
+DEPENDENCIES:
+  - Crashlytics
+  - Fabric
+  - MotionDnaSDK
+
+SPEC REPOS:
+  trunk:
+    - Crashlytics
+    - Fabric
+    - MotionDnaSDK
+
+SPEC CHECKSUMS:
+  Crashlytics: 540b7e5f5da5a042647227a5e3ac51d85eed06df
+  Fabric: 706c8b8098fff96c33c0db69cbf81f9c551d0d74
+  MotionDnaSDK: 723d17f1ce69ff5c63627ddb4dfb74b48c9ea242
+
+PODFILE CHECKSUM: 210522602647983d21d3d0641532d75078f41d39
+
+COCOAPODS: 1.9.1
