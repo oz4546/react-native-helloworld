@@ -28,8 +28,8 @@ jobs:
           API: ${{ github.event.client_payload.api_url }}
         # All commands after this point have access to the AWS CLI
         run: |
-          sed -i "s/appEnvironments\[appEnv]\;/${API};/" bin/config.js
-          sed -i "s/chatEnvironments\[appEnv]\;/${API};/" bin/config.js
+          sed -i "s/appEnvironments\[appEnv\]/${API}/" bin/config.js
+          sed -i "s/chatEnvironments\[appEnv\]/${API}/" bin/config.js
           cat bin/config.js
       - name: Install npm dependencies
         run: |
